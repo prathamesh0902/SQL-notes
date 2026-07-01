@@ -61,37 +61,26 @@ Use batch inserts/updates instead of row-by-row operations.
 
 ===========================================================================================================================
 
-
-
-
-
-Got it — you want to know which among Views, CTEs, and Temporary Tables can help optimize SQL queries, and also see other equivalent formats for structuring queries for performance.
-Here’s a clear breakdown:
-
 Views vs CTEs vs Temporary Tables — Performance Impact
-
-
 
 Feature
 When It Helps Performance
 When It Hurts Performance
 
 
-
-
 Views
-- Good for code reuse and simplifying complex joins. <br> - Indexed Views (materialized views) can speed up queries.
-- Normal (non-indexed) views are just query wrappers — they don’t store data, so performance is same as running the query directly.
+✅ Good for code reuse and simplifying complex joins. <br> - Indexed Views (materialized views) can speed up queries.
+❌ Normal (non-indexed) views are just query wrappers — they don’t store data, so performance is same as running the query directly.
 
 
 CTEs (Common Table Expressions)
-- Good for readability and breaking down complex queries. <br> - Useful for recursive queries.
-- CTEs are recomputed every time they are referenced (in most DBs), so they don’t inherently improve speed.
+✅ Good for readability and breaking down complex queries. <br> - Useful for recursive queries.
+❌ CTEs are recomputed every time they are referenced (in most DBs), so they don’t inherently improve speed.
 
 
 Temporary Tables
-- Can store intermediate results and reuse them multiple times in a session. <br> - Useful when working with large datasets that need multiple passes.
-- Writing to temp tables has overhead. <br> - Overuse can cause tempdb contention in SQL Server or similar issues in other DBs.
+✅ Can store intermediate results and reuse them multiple times in a session. <br> - Useful when working with large datasets that need multiple passes.
+❌ Writing to temp tables has overhead. <br> - Overuse can cause tempdb contention in SQL Server or similar issues in other DBs.
 
 
 
@@ -161,6 +150,16 @@ For speed: Use indexed tables/materialized views or temp tables when reusing dat
 For readability: Use CTEs.
 For abstraction: Use views (indexed if performance is critical).
 
+===========================================================================================================================
 
-If you want, I can prepare a benchmark comparison table showing execution times for the same query using View, CTE, Temp Table, and Materialized View so you can see which is fastest in practice.
-Do you want me to make that performance comparison?
+Scalar Functions
+Pros: Encapsulate reusable logic that returns a single value.
+Cons: Can hurt performance when used in large queries due to row-by-row execution.
+Table-Valued Functions (TVF)
+Pros: Return a table result set, useful for modular query building.
+Cons: Inline TVFs are fast, but multi-statement TVFs can cause poor query optimization.
+Stored Procedures
+Pros: Precompiled, can execute complex logic and multiple operations efficiently.
+Cons: Cannot be directly used in SELECT statements and are less flexible for ad-hoc queries.
+
+VIEWS, TEMP TABLES, FUNCTIONS, STORED FUNCTIONS : NOT EXECUTABLE IN DATABRICKS
